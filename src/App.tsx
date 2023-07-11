@@ -1,24 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import CustomButton from './components/CustomButton';
+import RenderTextComponent from './components/RenderTextComponent';
+import useRecognition from './components/useRecognition';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    const {
+        text,
+        isListening,
+        startRecordSpeech,
+        stopRecordSpeech,
+        hasRecognitionSupport,
+    } = useRecognition();
+
+    return (
+    <div className="app">
+        {
+            hasRecognitionSupport ? (
+                <>
+                    { isListening ? 'Говорите...' : ''}
+
+                    <RenderTextComponent text={text} />
+
+                    <CustomButton
+                        btnText={isListening ? 'завершить' : 'распознать речь'}
+                        onClick={() => isListening ? stopRecordSpeech() : startRecordSpeech()}
+                    />
+                </>
+            ) : <p>Ваш браузер не поддерживает запись речи.</p>
+        }
     </div>
   );
 }
